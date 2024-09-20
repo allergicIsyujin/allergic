@@ -1,6 +1,6 @@
 //user
 const { getDB } = require('../config/db');
-
+console.log(1)
 // 로그인 엔드포인트
 const login = async (req, res) => {
     const db = getDB();//db 인스턴스
