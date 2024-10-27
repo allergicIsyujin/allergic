@@ -26,6 +26,8 @@ const openAI_api = async (url, data) => {
     }
 };
 
+
+
 // OpenAI 이미지 처리 함수
 const openAI_IMG = async (userId, foodimage) => {
     const db = getDB();
@@ -45,6 +47,31 @@ const openAI_IMG = async (userId, foodimage) => {
         imgB64: foodimage,
     };
     const apiUrl = `http://${api_IP}/openAI/img`;
+    const respond = await openAI_api(apiUrl, dataToSend);
+    console.log(respond);
+    const result = JSON.parse(respond);
+    return result;
+};
+
+const openAI_detail = async (userId, foodimage) => {
+    const db = getDB();
+    let userAllergies = null;
+    try {
+        const userCollection = db.collection('user');
+        const userInformation = await userCollection.findOne({ userId: userId });
+        const trueFields = Object.keys(userInformation).filter(
+            (key) => userInformation[key] === true
+        );
+        userAllergies = trueFields.join(' ');
+    } catch (error) {
+        console.error('Error fetching user information:', error);
+    }
+    const dataToSend = {
+        allergy: userAllergies,
+        foodName:foodName,
+        imgB64: foodimage,
+    };
+    const apiUrl = `http://${api_IP}/openAI/img/detail`;
     const respond = await openAI_api(apiUrl, dataToSend);
     console.log(respond);
     const result = JSON.parse(respond);
@@ -79,4 +106,5 @@ module.exports = {
     openAI_api,
     openAI_IMG,
     openAI_SAY,
+    openAI_detail,
 };

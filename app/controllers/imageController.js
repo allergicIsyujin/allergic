@@ -11,10 +11,28 @@ const processBase64Image = async (req, res) => {
         return res.status(400).json({ error: 'Invalid input data' });
     }
     console.log(`Received image from user: ${userid}`);
-    console.log(`Received image from user: ${userid}`);
 
     try {
         Result = await openAI_IMG(userid, food);
+        console.log(Result);
+        imageUrl_2=imageUrl;
+        res.json( {result:Result} );
+    } catch (error) {
+        console.error('Error processing image:', error);
+        res.status(500).json({ error: 'Error processing image' });
+    }
+
+};
+
+const foodDetail = async (req, res) => {
+    const { userid, food, imageUrl,foodName } = req.body;
+    if (!userid || !food) {
+        return res.status(400).json({ error: 'Invalid input data' });
+    }
+    console.log(`Received image from user: ${userid}`);
+
+    try {
+        Result = await foodDetail(userid, food,foodName);
         console.log(Result);
         imageUrl_2=imageUrl;
         res.json( {result:Result} );
@@ -55,4 +73,5 @@ const saveImage = async (req, res) => {
 module.exports = {
     processBase64Image,
     saveImage,
+    foodDetail,
 };
