@@ -12,6 +12,7 @@ const getFoodRecord = async (req, res) => {
 
         for (let i = 0; i < documents.length; i++) {
             let record = await db.collection('record').findOne({ _id: documents[i]._id });
+            console.log(record.foodName);
             responseArray.push({
                 foodName: record.foodName,
                 backgroundColor: record.ok === 'O' ? 1 : 0,

@@ -1,10 +1,11 @@
 // services/openAIService.js
 const fetch = require('node-fetch');
-const db = require('../config/db');
+const { getDB } = require('../config/db');
 const api_IP = '127.0.0.1:5000';
 
 // POST 요청을 보내는 함수
 const openAI_api = async (url, data) => {
+    const db = getDB();
     try {
         const response = await fetch(url, {
             method: 'POST',
@@ -27,6 +28,7 @@ const openAI_api = async (url, data) => {
 
 // OpenAI 이미지 처리 함수
 const openAI_IMG = async (userId, foodimage) => {
+    const db = getDB();
     let userAllergies = null;
     try {
         const userCollection = db.collection('user');
@@ -44,12 +46,14 @@ const openAI_IMG = async (userId, foodimage) => {
     };
     const apiUrl = `http://${api_IP}/openAI/img`;
     const respond = await openAI_api(apiUrl, dataToSend);
+    console.log(respond);
     const result = JSON.parse(respond);
     return result;
 };
 
 // OpenAI 텍스트 처리 함수
 const openAI_SAY = async (userId, food) => {
+    const db = getDB();
     let userAllergies = null;
     try {
         const userCollection = db.collection('user');
