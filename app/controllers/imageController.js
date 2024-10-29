@@ -62,6 +62,7 @@ const saveImage = async (req, res) => {
             foodName: Result.foodName,
             ingredient: Result.ingredients,
             notIngredients: Result.notIngredients,
+            calo:Result.calo,
         });
         res.json({ message: 'success' });
     } catch (error) {

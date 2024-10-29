@@ -12,6 +12,7 @@ const getFoodRecord = async (req, res) => {
 
         for (let i = 0; i < documents.length; i++) {
             let record = await db.collection('record').findOne({ _id: documents[i]._id });
+            console.log("현호바보")
             console.log(record.foodName);
             responseArray.push({
                 foodName: record.foodName,
@@ -19,6 +20,8 @@ const getFoodRecord = async (req, res) => {
                 image: documents[i].food,
                 description: record.ingredient,
                 ingredient: record.notIngredients,
+                today:record.today,
+                calo:record.calo
             });
         }
         console.log(responseArray);
