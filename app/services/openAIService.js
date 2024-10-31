@@ -79,8 +79,36 @@ const openAI_SAY = async (userId, food) => {
     return result;
 };
 
+const openAI_FB = async (userId, image, fN) => {
+    const db = getDB();
+    let userAllergies = null;
+    console.log(userId)
+    console.log(fN);
+    try {
+        const userCollection = db.collection('user');
+        const userInformation = await userCollection.findOne({ userId: userId });
+        const trueFields = Object.keys(userInformation).filter(
+            (key) => userInformation[key] === true
+        );
+        userAllergies = trueFields.join(' ');
+    } catch (error) {
+        console.error('Error fetching user information:', error);
+    }
+    const dataToSend = {
+        allergy: userAllergies,
+        imgB64: image,
+        foodName : fN,
+    };
+    const apiUrl = `http://${api_IP}/openAI/feedback`;
+    const respond = await openAI_api(apiUrl, dataToSend);
+    console.log(respond);
+    const result = JSON.parse(respond);
+    return result;
+}
+
 module.exports = {
     openAI_api,
     openAI_IMG,
+    openAI_FB,
     openAI_SAY,
 };

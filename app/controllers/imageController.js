@@ -1,6 +1,6 @@
 // image
 const { getDB } = require('../config/db');
-const { openAI_IMG } = require('../services/openAIService');
+const { openAI_IMG,openAI_FB } = require('../services/openAIService');
 let Result=0;
 let imageUrl_2;
 
@@ -71,8 +71,23 @@ const saveImage = async (req, res) => {
     }
 };
 
+const feedbackAI = async(req, res) => {
+    const userId = req.body.userId;
+    const foodName = req.body.foodName;
+    const Base64 = req.body.Base64;
+    try {
+        Result = await openAI_FB(userId, Base64, foodName);
+        console.log(Result);
+        res.json({result : Result});
+    } catch (error) {
+        console.error('Error feedback image : ', error);
+        res.status(500).json({ error: 'Error feedback image' });
+    }
+}
+
 module.exports = {
     processBase64Image,
     saveImage,
     foodDetail,
+    feedbackAI,
 };
